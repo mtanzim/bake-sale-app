@@ -2,7 +2,9 @@ import React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import { fetchInitialDeals } from "./fetch";
 import DealList from "./DealList";
-import SingleDeal from "./SingleDeal";
+// import SingleDeal from "./SingleDeal";
+import { fetchOneDeal } from "./fetch";
+
 
 export default class AppContainer extends React.Component {
   state = {
@@ -17,7 +19,8 @@ export default class AppContainer extends React.Component {
     this.setState({ deals });
   }
 
-  showSingleDeal = async data => {
+  showSingleDeal = async (id) => {
+    let data = await fetchOneDeal(id);
     this.setState(
       {
         singleDeal: true,
@@ -56,19 +59,8 @@ export default class AppContainer extends React.Component {
                   : this.state.currentDeal
               }
             />
-            {this.state.singleDeal && (
-              <SingleDeal
-                goBack={this.toggleBack}
-                deal={this.state.singleDealData}
-              />
-            )}
           </View>
         ) : (
-          // <SingleDeal
-          //   goBack={this.toggleBack}
-          //   deal={this.state.singleDealData}
-          // />
-          // <Button title="Back" onPress={this.goBack} />
           <Text>Loading...</Text>
         )}
       </View>
@@ -81,7 +73,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 25
+    marginTop: 50,
+    marginBottom: 50
   },
   header: {
     fontSize: 40

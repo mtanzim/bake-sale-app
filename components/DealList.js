@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View, FlatList } from "react-native";
 import PropTypes from "prop-types";
-import { fetchOneDeal } from "./fetch";
 
 import EachDeal from "./EachDeal";
 
@@ -16,34 +15,24 @@ export default class DealList extends React.Component {
           name: PropTypes.string.isRequired
         }).isRequired
       }).isRequired
-    ).isRequired,
-    showSingleDeal: PropTypes.func.isRequired
+    ).isRequired
+    // showSingleDeal: PropTypes.func.isRequired
   };
 
-  fetchSingleDeal = async id => {
-    this.props.showSingleDeal(await fetchOneDeal(id));
+  fetchSingleDeal = id => {
+    this.props.showSingleDeal(id);
   };
 
   render() {
     return (
-      <View style={styles.dealContainer}>
-        <FlatList
-          data={this.props.deals}
-          renderItem={({ item }) => (
-            <EachDeal fetchDeal={this.fetchSingleDeal} deal={item} />
-          )}
-        />
-      </View>
+      <FlatList
+        data={this.props.deals}
+        renderItem={({ item }) => (
+          <EachDeal fetchDeal={this.fetchSingleDeal} deal={item} />
+        )}
+      />
     );
   }
 }
 
-const styles = StyleSheet.create({
-  dealContainer: {
-    // flex: 1,
-    marginTop: 15,
-    paddingHorizontal: 35,
-    alignItems: "flex-start",
-    justifyContent: "flex-start"
-  }
-});
+const styles = StyleSheet.create({});

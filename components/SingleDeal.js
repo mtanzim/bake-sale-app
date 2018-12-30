@@ -23,8 +23,5 @@ export default class SingleDeal extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  singleDeal: {
-    flex: 1
-    // marginBottom: 25
-  }
+
 });

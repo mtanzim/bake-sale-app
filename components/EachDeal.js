@@ -43,7 +43,8 @@ export default class EachDeal extends React.Component {
 const styles = StyleSheet.create({
   eachDealContainer: {
     flex: 1,
-    marginBottom: 25
+    marginBottom: 25,
+    paddingHorizontal: 15,
   },
   dealImage: {
     width: "100%",
