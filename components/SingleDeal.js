@@ -12,16 +12,15 @@ import PropTypes from "prop-types";
 export default class SingleDeal extends React.Component {
   static propTypes = {
     deal: PropTypes.object.isRequired,
-    goBack: PropTypes.func.isRequired
   };
 
   render() {
     return (
-          <Text>Now showing deal for {this.props.deal.key}</Text>
+      <View>
+        <Text>Now showing deal for {this.props.deal.key}</Text>
+      </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-
-});
+const styles = StyleSheet.create({});

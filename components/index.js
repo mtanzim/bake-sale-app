@@ -1,9 +1,10 @@
 import React from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { fetchInitialDeals } from "./fetch";
 import DealList from "./DealList";
 // import SingleDeal from "./SingleDeal";
 import { fetchOneDeal } from "./fetch";
+import SingleDeal from "./SingleDeal";
 
 export default class AppContainer extends React.Component {
   state = {
@@ -35,10 +36,17 @@ export default class AppContainer extends React.Component {
   };
 
   toggleBack = () => {
-    this.setState({
-      singleDeal: false,
-      singelDealData: {},
-      currentDeal: []
+    this.setState(prevState => {
+      if (prevState.singleDeal === true) {
+        return {
+          singleDeal: false,
+          singelDealData: {},
+          currentDeal: []
+        };
+      } else {
+        console.log('Doing nothing!')
+        return prevState;
+      }
     });
   };
 
@@ -46,17 +54,27 @@ export default class AppContainer extends React.Component {
     return <Text>Loading...</Text>;
   };
 
-  renderList = () => {
+  renderList = (listData) => {
     return (
-      <DealList showSingleDeal={this.showSingleDeal} deals={this.state.deals} />
+      <DealList showSingleDeal={this.showSingleDeal} deals={listData} />
     );
   };
+
+  rendeSingleDeal = () => (
+    <SingleDeal deal={this.state.singleDealData} />
+  );
 
   render() {
     return (
       <View style={styles.appContainer}>
-        <Text style={styles.header}>Bakesale</Text>
-        {this.state.deals.length > 0 ? this.renderList() : this.renderLoading()}
+        <TouchableOpacity onPress={this.toggleBack}>
+          <Text style={styles.header}>Bakesale</Text>
+        </TouchableOpacity>
+        {!this.state.singleDeal
+          ? this.state.deals.length > 0
+            ? this.renderList(this.state.deals)
+            : this.renderLoading()
+          : this.rendeSingleDeal()}
       </View>
     );
   }
@@ -66,11 +84,12 @@ const styles = StyleSheet.create({
   appContainer: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     marginTop: 50,
     marginBottom: 50
   },
   header: {
-    fontSize: 40
+    fontSize: 40,
+    marginBottom: 20,
   }
 });
