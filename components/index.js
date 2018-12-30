@@ -5,7 +5,6 @@ import DealList from "./DealList";
 // import SingleDeal from "./SingleDeal";
 import { fetchOneDeal } from "./fetch";
 
-
 export default class AppContainer extends React.Component {
   state = {
     deals: [],
@@ -19,7 +18,7 @@ export default class AppContainer extends React.Component {
     this.setState({ deals });
   }
 
-  showSingleDeal = async (id) => {
+  showSingleDeal = async id => {
     let data = await fetchOneDeal(id);
     this.setState(
       {
@@ -29,7 +28,7 @@ export default class AppContainer extends React.Component {
       },
       () => {
         console.log(this.state.singleDealData.key);
-        console.log(this.state.currentDeal);
+        // console.log(this.state.currentDeal);
         // console.log('Back to root!')
       }
     );
@@ -43,26 +42,21 @@ export default class AppContainer extends React.Component {
     });
   };
 
+  renderLoading = () => {
+    return <Text>Loading...</Text>;
+  };
+
+  renderList = () => {
+    return (
+      <DealList showSingleDeal={this.showSingleDeal} deals={this.state.deals} />
+    );
+  };
+
   render() {
     return (
       <View style={styles.appContainer}>
         <Text style={styles.header}>Bakesale</Text>
-        {this.state.deals.length > 0 ? (
-          <View>
-            <DealList
-              showSingleDeal={
-                !this.state.singleDeal ? this.showSingleDeal : this.toggleBack
-              }
-              deals={
-                !this.state.singleDeal
-                  ? this.state.deals
-                  : this.state.currentDeal
-              }
-            />
-          </View>
-        ) : (
-          <Text>Loading...</Text>
-        )}
+        {this.state.deals.length > 0 ? this.renderList() : this.renderLoading()}
       </View>
     );
   }
