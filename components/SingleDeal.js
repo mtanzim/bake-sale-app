@@ -17,12 +17,7 @@ export default class SingleDeal extends React.Component {
 
   render() {
     return (
-      <TouchableOpacity onPress={() => this.props.fetchDeal(deal.key)}>
-        <View style={styles.singleDeal}>
           <Text>Now showing deal for {this.props.deal.key}</Text>
-          <Button title="Back" onPress={this.props.goBack} />
-        </View>
-      </TouchableOpacity>
     );
   }
 }

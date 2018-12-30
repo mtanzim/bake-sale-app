@@ -40,7 +40,7 @@ export default class DealList extends React.Component {
 
 const styles = StyleSheet.create({
   dealContainer: {
-    flex: 1,
+    // flex: 1,
     marginTop: 15,
     paddingHorizontal: 35,
     alignItems: "flex-start",

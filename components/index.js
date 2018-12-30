@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
 import { fetchInitialDeals } from "./fetch";
 import DealList from "./DealList";
 import SingleDeal from "./SingleDeal";
@@ -7,8 +7,9 @@ import SingleDeal from "./SingleDeal";
 export default class AppContainer extends React.Component {
   state = {
     deals: [],
+    currentDeal: [],
     singleDeal: false,
-    singelDealData: {}
+    singleDealData: {}
   };
 
   async componentDidMount() {
@@ -17,16 +18,25 @@ export default class AppContainer extends React.Component {
   }
 
   showSingleDeal = async data => {
-    this.setState({ singleDeal: true, singelDealData: data }, () => {
-      // console.log(this.state.singelDealData);
-      // console.log('Back to root!')
-    });
+    this.setState(
+      {
+        singleDeal: true,
+        currentDeal: this.state.deals.filter(a => a.key === data.key),
+        singleDealData: data
+      },
+      () => {
+        console.log(this.state.singleDealData.key);
+        console.log(this.state.currentDeal);
+        // console.log('Back to root!')
+      }
+    );
   };
 
   toggleBack = () => {
     this.setState({
       singleDeal: false,
-      singelDealData: {}
+      singelDealData: {},
+      currentDeal: []
     });
   };
 
@@ -35,18 +45,30 @@ export default class AppContainer extends React.Component {
       <View style={styles.appContainer}>
         <Text style={styles.header}>Bakesale</Text>
         {this.state.deals.length > 0 ? (
-          !this.state.singleDeal ? (
+          <View>
             <DealList
-              showSingleDeal={this.showSingleDeal}
-              deals={this.state.deals}
+              showSingleDeal={
+                !this.state.singleDeal ? this.showSingleDeal : this.toggleBack
+              }
+              deals={
+                !this.state.singleDeal
+                  ? this.state.deals
+                  : this.state.currentDeal
+              }
             />
-          ) : (
-            <SingleDeal
-              goBack={this.toggleBack}
-              deal={this.state.singelDealData}
-            />
-          )
+            {this.state.singleDeal && (
+              <SingleDeal
+                goBack={this.toggleBack}
+                deal={this.state.singleDealData}
+              />
+            )}
+          </View>
         ) : (
+          // <SingleDeal
+          //   goBack={this.toggleBack}
+          //   deal={this.state.singleDealData}
+          // />
+          // <Button title="Back" onPress={this.goBack} />
           <Text>Loading...</Text>
         )}
       </View>
