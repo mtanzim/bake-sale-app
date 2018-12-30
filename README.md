@@ -1,6 +1,4 @@
-# React Native Random Number Game
-
-Play the game [here](https://expo.io/@mtanzim/random-number-game).
+# React Native Bake Sale App
 
 ## Description
 
