@@ -2,16 +2,12 @@ import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { fetchInitialDeals } from "./fetch";
 import DealList from "./DealList";
-// import SingleDeal from "./SingleDeal";
-import { fetchOneDeal } from "./fetch";
 import SingleDeal from "./SingleDeal";
 
 export default class AppContainer extends React.Component {
   state = {
     deals: [],
-    currentDeal: [],
-    singleDeal: false,
-    singleDealData: {}
+    currentDealId: null,
   };
 
   async componentDidMount() {
@@ -19,50 +15,50 @@ export default class AppContainer extends React.Component {
     this.setState({ deals });
   }
 
-  showSingleDeal = async id => {
-    let data = await fetchOneDeal(id);
+  showSingleDeal =  id => {
+    // let data = await fetchOneDeal(id);
     this.setState(
       {
-        singleDeal: true,
-        currentDeal: this.state.deals.filter(a => a.key === data.key),
-        singleDealData: data
+        // singleDeal: true,
+        currentDealId: id
+        // singleDealData: data
       },
       () => {
-        console.log(this.state.singleDealData.key);
-        // console.log(this.state.currentDeal);
-        // console.log('Back to root!')
+        console.log(this.state.currentDealId);
       }
     );
   };
 
   toggleBack = () => {
     this.setState(prevState => {
-      if (prevState.singleDeal === true) {
+      if (prevState.currentDealId) {
         return {
-          singleDeal: false,
-          singelDealData: {},
-          currentDeal: []
+          currentDealId: null
         };
       } else {
-        console.log('Doing nothing!')
+        // console.log('Doing nothing!')
         return prevState;
       }
     });
   };
 
   renderLoading = () => {
-    return <Text>Loading...</Text>;
+    return <Text style={styles.loadingText}>Loading...</Text>;
   };
 
-  renderList = (listData) => {
+  renderList = () => {
     return (
-      <DealList showSingleDeal={this.showSingleDeal} deals={listData} />
+      <DealList showSingleDeal={this.showSingleDeal} deals={this.state.deals} />
     );
   };
 
-  rendeSingleDeal = () => (
-    <SingleDeal deal={this.state.singleDealData} />
-  );
+  findCurrentDeal = () => {
+    return this.state.deals.find(a => a.key === this.state.currentDealId)
+  }
+
+  renderSingleDeal = () => {
+    return (<SingleDeal initDeal={this.findCurrentDeal()} />)
+  }
 
   render() {
     return (
@@ -70,11 +66,11 @@ export default class AppContainer extends React.Component {
         <TouchableOpacity onPress={this.toggleBack}>
           <Text style={styles.header}>Bakesale</Text>
         </TouchableOpacity>
-        {!this.state.singleDeal
+        {!this.state.currentDealId
           ? this.state.deals.length > 0
-            ? this.renderList(this.state.deals)
+            ? this.renderList()
             : this.renderLoading()
-          : this.rendeSingleDeal()}
+          : this.renderSingleDeal()}
       </View>
     );
   }
@@ -83,13 +79,18 @@ export default class AppContainer extends React.Component {
 const styles = StyleSheet.create({
   appContainer: {
     flex: 1,
-    alignItems: "center",
+    // alignItems: "center",
     justifyContent: "flex-start",
     marginTop: 50,
     marginBottom: 50
   },
   header: {
+    alignSelf: 'center',
     fontSize: 40,
     marginBottom: 20,
+  },
+  loadingText: {
+    alignSelf: 'center',
+    fontSize: 12,
   }
 });

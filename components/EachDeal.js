@@ -19,8 +19,8 @@ export default class EachDeal extends React.Component {
     const { deal } = this.props;
 
     return (
-      <TouchableOpacity onPress={() => this.props.fetchDeal(deal.key)}>
-        <View style={styles.eachDealContainer}>
+      <TouchableOpacity style={styles.eachDealContainer} onPress={() => this.props.fetchDeal(deal.key)}>
+        <View >
           <Image
             style={[styles.dealImage]}
             source={{ uri: this.props.deal.media[0] }}
