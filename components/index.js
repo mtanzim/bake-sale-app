@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { fetchInitialDeals } from "./fetch";
 import DealList from "./DealList";
 import SingleDeal from "./SingleDeal";
+import SearchBar from "./SearchBar"
 
 export default class AppContainer extends React.Component {
   state = {
@@ -48,7 +49,10 @@ export default class AppContainer extends React.Component {
 
   renderList = () => {
     return (
-      <DealList showSingleDeal={this.showSingleDeal} deals={this.state.deals} />
+      <View>
+        <SearchBar/>
+        <DealList showSingleDeal={this.showSingleDeal} deals={this.state.deals} />
+      </View>
     );
   };
 

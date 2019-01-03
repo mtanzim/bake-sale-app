@@ -35,20 +35,33 @@ export default class SingleDeal extends React.Component {
 
   fetchdeal = async () => {
     let detail = await fetchOneDeal(this.state.deal.key);
-    this.setState({deal:detail})
+    this.setState({ deal: detail });
+    // this.selectedDealItems = [this.state.deal.user.name, this.state.deal.description]
   };
 
   render() {
     return (
-      <View style = {styles.detailContainer}>
+      <View style={styles.detailContainer}>
         <EachDeal
           fetchDeal={() => console.log("Do nothing")}
           deal={this.state.deal}
         />
         {this.state.deal.user && (
           <View style={styles.singleDealDetail}>
-            <Text>{this.state.deal.user.name}</Text>
-            <Text>{this.state.deal.description}</Text>
+            <FlatList
+              data={[
+                { content: this.state.deal.user.name, styleClass: styles.title },
+                { content: this.state.deal.description, styleClass: styles.desc }
+              ]}
+              renderItem={({ item }) => (
+                <Text style={item.styleClass} id={item.id}>
+                  {item.content}
+                </Text>
+              )}
+              keyExtractor={(item, index) => index.toString()}
+            />
+            {/* <Text>{this.state.deal.user.name}</Text> */}
+            {/* <Text>{this.state.deal.description}</Text> */}
           </View>
         )}
       </View>
@@ -59,15 +72,26 @@ export default class SingleDeal extends React.Component {
 const styles = StyleSheet.create({
   detailContainer: {
     flex: 1,
+
     justifyContent: "flex-start",
     // paddingHorizontal: 15,
-    fontSize: 16,
+    fontSize: 16
   },
-  singleDealDetail:{
+  singleDealDetail: {
     flex: 1,
     fontSize: 14,
-    paddingHorizontal: 15,
+    // padding: 15,
+    marginHorizontal: 15,
     marginTop: 10,
+    // borderColor: "#ddd",
+    // borderWidth: 1,
+    // padding: 8,
+    // borderRadius: 2
+  },
+  title: {
+    fontSize: 20,
+  },
+  desc: {
+    fontSize: 12,
   }
-
 });

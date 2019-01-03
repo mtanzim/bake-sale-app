@@ -17,16 +17,24 @@ export default class EachDeal extends React.Component {
 
   render() {
     const { deal } = this.props;
+    this.maxTitleLen = 50;
 
     return (
-      <TouchableOpacity style={styles.eachDealContainer} onPress={() => this.props.fetchDeal(deal.key)}>
-        <View >
+      <TouchableOpacity
+        style={styles.eachDealContainer}
+        onPress={() => this.props.fetchDeal(deal.key)}
+      >
+        <View>
           <Image
             style={[styles.dealImage]}
             source={{ uri: this.props.deal.media[0] }}
           />
           <View style={styles.dealTextContainer}>
-            <Text style={styles.dealTitle}>{deal.title}</Text>
+            <Text style={styles.dealTitle}>
+              {deal.title.length < this.maxTitleLen
+                ? deal.title
+                : deal.title.substr(0, this.maxTitleLen) + " ..."}
+            </Text>
             <View style={styles.dealSubTextContainer}>
               <Text style={styles.dealCause}>{deal.cause.name}</Text>
               <Text style={styles.dealPrice}>
@@ -44,13 +52,14 @@ const styles = StyleSheet.create({
   eachDealContainer: {
     flex: 1,
     marginBottom: 25,
-    paddingHorizontal: 15,
+    paddingHorizontal: 15
   },
   dealImage: {
     width: "100%",
     height: 150
   },
   dealTextContainer: {
+    // flex:1,
     borderColor: "#ddd",
     borderWidth: 1,
     padding: 8

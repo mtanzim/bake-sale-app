@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { FlatList } from "react-native";
 import PropTypes from "prop-types";
 
 import EachDeal from "./EachDeal";
@@ -34,5 +34,3 @@ export default class DealList extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({});
