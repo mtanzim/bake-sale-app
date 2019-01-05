@@ -42,21 +42,24 @@ export default class SingleDeal extends React.Component {
   render() {
     return (
       <View style={styles.detailContainer}>
-        <EachDeal fetchDeal={()=>console.log('Do nothing')} deal={this.props.initDeal} />
+        <EachDeal
+          fetchDeal={() => console.log("Do nothing")}
+          deal={this.props.initDeal}
+        />
         {this.state.deal.user && (
-            <FlatList
-              style={styles.singleDealDetail}
-              data={[
-                { content: this.state.deal.user.name, styleClass: styles.title },
-                { content: this.state.deal.description, styleClass: styles.desc }
-              ]}
-              renderItem={({ item }) => (
-                <Text style={item.styleClass} id={item.id}>
-                  {item.content}
-                </Text>
-              )}
-              keyExtractor={(item, index) => index.toString()}
-            />
+          <FlatList
+            style={styles.singleDealDetail}
+            data={[
+              { content: this.state.deal.user.name, styleClass: styles.title },
+              { content: this.state.deal.description, styleClass: styles.desc }
+            ]}
+            renderItem={({ item }) => (
+              <Text style={item.styleClass} id={item.id}>
+                {item.content}
+              </Text>
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />
         )}
       </View>
     );
@@ -72,15 +75,14 @@ const styles = StyleSheet.create({
   singleDealDetail: {
     fontSize: 14,
     marginHorizontal: 15,
-    // borderColor: "#ddd",
-    // borderWidth: 1,
+    marginVertical: 15
   },
   title: {
     flex: 1,
-    fontSize: 20,
+    fontSize: 20
   },
   desc: {
     flex: 1,
-    fontSize: 12,
+    fontSize: 12
   }
 });

@@ -69,11 +69,11 @@ export default class AppContainer extends React.Component {
         <TouchableOpacity onPress={this.toggleBack}>
           <Text style={styles.header}>Bakesale</Text>
         </TouchableOpacity>
-          {!this.state.currentDealId
-            ? this.state.deals.length > 0
-              ? this.renderList()
-              : this.renderLoading()
-            : this.renderSingleDeal()}
+        {!this.state.currentDealId
+          ? this.state.deals.length > 0
+            ? this.renderList()
+            : this.renderLoading()
+          : this.renderSingleDeal()}
       </View>
     );
   }
@@ -95,5 +95,5 @@ const styles = StyleSheet.create({
   loadingText: {
     alignSelf: "center",
     fontSize: 12
-  },
+  }
 });

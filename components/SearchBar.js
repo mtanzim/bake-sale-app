@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput
-} from "react-native";
+import { StyleSheet, Text, View, TextInput } from "react-native";
 import PropTypes from "prop-types";
 
 export default class SearchBar extends React.Component {
@@ -12,12 +7,8 @@ export default class SearchBar extends React.Component {
   //   // showSingleDeal: PropTypes.func.isRequired
   // };
 
-
   render() {
-    return (
-      <TextInput style={styles.searchBar} placeholder="Search Deals">
-      </TextInput>
-    );
+    return <TextInput style={styles.searchBar} placeholder="Search Deals" />;
   }
 }
 
