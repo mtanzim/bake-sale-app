@@ -20,40 +20,40 @@ export default class EachDeal extends React.Component {
     this.maxTitleLen = 50;
 
     return (
-        <TouchableOpacity
-          style={styles.eachDealContainer}
-          onPress={() => this.props.fetchDeal(deal.key)}
-        >
-          <View>
-            <Image
-              style={[styles.dealImage]}
-              source={{ uri: this.props.deal.media[0] }}
-            />
-            <View style={styles.dealTextContainer}>
-              <Text style={styles.dealTitle}>
-                {deal.title.length < this.maxTitleLen
-                  ? deal.title
-                  : deal.title.substr(0, this.maxTitleLen) + " ..."}
+      <TouchableOpacity
+        style={styles.eachDealContainer}
+        onPress={() => this.props.fetchDeal(deal.key)}
+      >
+        <View>
+          <Image
+            style={[styles.dealImage]}
+            source={{ uri: this.props.deal.media[0] }}
+          />
+          <View style={styles.dealTextContainer}>
+            <Text style={styles.dealTitle}>
+              {deal.title.length < this.maxTitleLen
+                ? deal.title
+                : deal.title.substr(0, this.maxTitleLen) + " ..."}
+            </Text>
+            <View style={styles.dealSubTextContainer}>
+              <Text style={styles.dealCause}>{deal.cause.name}</Text>
+              <Text style={styles.dealPrice}>
+                ${Math.round(deal.price / 100)}
               </Text>
-              <View style={styles.dealSubTextContainer}>
-                <Text style={styles.dealCause}>{deal.cause.name}</Text>
-                <Text style={styles.dealPrice}>
-                  ${Math.round(deal.price / 100)}
-                </Text>
-              </View>
             </View>
           </View>
-        </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
     );
   }
 }
 
 const styles = StyleSheet.create({
   eachDealContainer: {
-    width: '100%',
+    width: "100%",
     paddingHorizontal: 15,
     paddingBottom: 20,
-    marginBottom: 5,
+    marginBottom: 5
   },
   dealImage: {
     width: "100%",
