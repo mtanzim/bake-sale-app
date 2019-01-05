@@ -26,6 +26,7 @@ export default class DealList extends React.Component {
   render() {
     return (
       <FlatList
+        style={{marginBottom: 150}}
         data={this.props.deals}
         renderItem={({ item }) => (
           <EachDeal fetchDeal={this.fetchSingleDeal} deal={item} />

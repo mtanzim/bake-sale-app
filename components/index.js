@@ -3,12 +3,12 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { fetchInitialDeals } from "./fetch";
 import DealList from "./DealList";
 import SingleDeal from "./SingleDeal";
-import SearchBar from "./SearchBar"
+import SearchBar from "./SearchBar";
 
 export default class AppContainer extends React.Component {
   state = {
     deals: [],
-    currentDealId: null,
+    currentDealId: null
   };
 
   async componentDidMount() {
@@ -16,13 +16,10 @@ export default class AppContainer extends React.Component {
     this.setState({ deals });
   }
 
-  showSingleDeal =  id => {
-    // let data = await fetchOneDeal(id);
+  showSingleDeal = id => {
     this.setState(
       {
-        // singleDeal: true,
         currentDealId: id
-        // singleDealData: data
       },
       () => {
         console.log(this.state.currentDealId);
@@ -37,7 +34,6 @@ export default class AppContainer extends React.Component {
           currentDealId: null
         };
       } else {
-        // console.log('Doing nothing!')
         return prevState;
       }
     });
@@ -50,19 +46,22 @@ export default class AppContainer extends React.Component {
   renderList = () => {
     return (
       <View>
-        <SearchBar/>
-        <DealList showSingleDeal={this.showSingleDeal} deals={this.state.deals} />
+        <SearchBar />
+        <DealList
+          showSingleDeal={this.showSingleDeal}
+          deals={this.state.deals}
+        />
       </View>
     );
   };
 
   findCurrentDeal = () => {
-    return this.state.deals.find(a => a.key === this.state.currentDealId)
-  }
+    return this.state.deals.find(a => a.key === this.state.currentDealId);
+  };
 
   renderSingleDeal = () => {
-    return (<SingleDeal initDeal={this.findCurrentDeal()} />)
-  }
+    return <SingleDeal initDeal={this.findCurrentDeal()} />;
+  };
 
   render() {
     return (
@@ -70,11 +69,11 @@ export default class AppContainer extends React.Component {
         <TouchableOpacity onPress={this.toggleBack}>
           <Text style={styles.header}>Bakesale</Text>
         </TouchableOpacity>
-        {!this.state.currentDealId
-          ? this.state.deals.length > 0
-            ? this.renderList()
-            : this.renderLoading()
-          : this.renderSingleDeal()}
+          {!this.state.currentDealId
+            ? this.state.deals.length > 0
+              ? this.renderList()
+              : this.renderLoading()
+            : this.renderSingleDeal()}
       </View>
     );
   }
@@ -83,18 +82,18 @@ export default class AppContainer extends React.Component {
 const styles = StyleSheet.create({
   appContainer: {
     flex: 1,
-    // alignItems: "center",
     justifyContent: "flex-start",
     marginTop: 50,
-    marginBottom: 50
+    marginBottom: 5,
+    paddingBottom: 5
   },
   header: {
-    alignSelf: 'center',
+    alignSelf: "center",
     fontSize: 40,
-    marginBottom: 20,
+    marginBottom: 20
   },
   loadingText: {
-    alignSelf: 'center',
-    fontSize: 12,
-  }
+    alignSelf: "center",
+    fontSize: 12
+  },
 });

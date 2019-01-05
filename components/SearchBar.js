@@ -24,6 +24,7 @@ export default class SearchBar extends React.Component {
 const styles = StyleSheet.create({
   searchBar: {
     // alignSelf: 'center',
+    // flex: 1,
     fontSize: 14,
     marginBottom: 20,
     marginHorizontal: 15,

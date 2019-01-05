@@ -42,13 +42,10 @@ export default class SingleDeal extends React.Component {
   render() {
     return (
       <View style={styles.detailContainer}>
-        <EachDeal
-          fetchDeal={() => console.log("Do nothing")}
-          deal={this.state.deal}
-        />
+        <EachDeal fetchDeal={()=>console.log('Do nothing')} deal={this.props.initDeal} />
         {this.state.deal.user && (
-          <View style={styles.singleDealDetail}>
             <FlatList
+              style={styles.singleDealDetail}
               data={[
                 { content: this.state.deal.user.name, styleClass: styles.title },
                 { content: this.state.deal.description, styleClass: styles.desc }
@@ -60,9 +57,6 @@ export default class SingleDeal extends React.Component {
               )}
               keyExtractor={(item, index) => index.toString()}
             />
-            {/* <Text>{this.state.deal.user.name}</Text> */}
-            {/* <Text>{this.state.deal.description}</Text> */}
-          </View>
         )}
       </View>
     );
@@ -72,26 +66,21 @@ export default class SingleDeal extends React.Component {
 const styles = StyleSheet.create({
   detailContainer: {
     flex: 1,
-
     justifyContent: "flex-start",
-    // paddingHorizontal: 15,
     fontSize: 16
   },
   singleDealDetail: {
-    flex: 1,
     fontSize: 14,
-    // padding: 15,
     marginHorizontal: 15,
-    marginTop: 10,
     // borderColor: "#ddd",
     // borderWidth: 1,
-    // padding: 8,
-    // borderRadius: 2
   },
   title: {
+    flex: 1,
     fontSize: 20,
   },
   desc: {
+    flex: 1,
     fontSize: 12,
   }
 });
