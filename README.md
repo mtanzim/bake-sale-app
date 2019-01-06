@@ -17,3 +17,4 @@ React native application suggested by the following lynda.com [tutorial](https:/
 - [Flexbox in React Native](https://facebook.github.io/react-native/docs/flexbox)
 - Compoments can be remounted by changing the props on the parent (ie: `key`)
 - [Canceling async/fetch commands as component unmounts](https://reactjs.org/blog/2015/12/16/ismounted-antipattern.html)
+    - See example in [SingleDeal.js](./components/SingleDeal.js)
