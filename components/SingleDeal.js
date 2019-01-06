@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import PropTypes from "prop-types";
 
-import { fetchOneDeal } from "./fetch";
+import { fetchOneDeal, makeCancelable } from "./fetch";
 import EachDeal from "./EachDeal";
 
 export default class SingleDeal extends React.Component {
@@ -29,15 +29,19 @@ export default class SingleDeal extends React.Component {
     deal: this.props.initDeal
   };
 
+  cancelableFetch = makeCancelable(fetchOneDeal(this.state.deal.key));
+
   componentDidMount() {
-    this.fetchdeal();
+    this.cancelableFetch.promise
+      .then(res => {
+        this.setState({ deal: res });
+      })
+      .catch(err => console.log(err));
   }
 
-  fetchdeal = async () => {
-    let detail = await fetchOneDeal(this.state.deal.key);
-    this.setState({ deal: detail });
-    // this.selectedDealItems = [this.state.deal.user.name, this.state.deal.description]
-  };
+  componentWillUnmount() {
+    this.cancelableFetch.cancel();
+  }
 
   render() {
     return (

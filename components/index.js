@@ -1,43 +1,73 @@
 import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Animated,
+  Easing,
+  Dimensions
+} from "react-native";
 import { fetchInitialDeals, fetchSearch } from "./fetch";
 import DealList from "./DealList";
 import SingleDeal from "./SingleDeal";
 import SearchBar from "./SearchBar";
 
 export default class AppContainer extends React.Component {
+  titleXPos = new Animated.Value(0);
+
   state = {
     deals: [],
     searchedDeals: [],
+    searchFailed: false,
     currentDealId: null
   };
 
+  animateHeader = (dir = 1) => {
+    const width = Dimensions.get("window").width - 250;
+
+    Animated.timing(this.titleXPos, {
+      toValue: dir * (width / 2),
+      duration: 1000,
+      easing: Easing.ease
+    }).start(() => {
+      if (this.state.deals.length === 0) {
+        this.animateHeader(dir * -1);
+      } else {
+        Animated.timing(this.titleXPos, {
+          toValue: 0,
+          duration: 750,
+          easing: Easing.ease,
+        }).start()
+      }
+    });
+  };
+
   async componentDidMount() {
+    if (this.state.deals.length === 0) this.animateHeader();
     let deals = await fetchInitialDeals();
-    this.setState({ deals });
+    setTimeout(async () => {
+      this.setState({ deals });
+    }, 1250);
   }
 
   getSearchResults = async text => {
     const results = await fetchSearch(text);
     const keys = results.map(a => a.key);
-    this.setState(
-      prevState => {
-        // console.log(keys);
-        return {
-          searchedDeals: prevState.deals.filter(a => {
-            // console.log(`Testing ${a.key} on ${keys}`)
-            // console.log (keys.indexOf(a.key))
-            return keys.indexOf(a.key) > -1;
-          })
-        };
-      },
-      () => {
-        // console.log('These keys made it:')
-        this.state.searchedDeals.forEach(a => {
-          // console.log(a.key)
-        });
+    this.setState(prevState => {
+      let searchedDeals = prevState.deals.filter(a => {
+        return keys.indexOf(a.key) > -1;
+      });
+
+      if (searchedDeals.length === 0) {
+        return { searchFailed: true, searchedDeals: [] };
       }
-    );
+
+      return {
+        searchedDeals,
+        searchFailed: false
+      };
+    });
   };
 
   showSingleDeal = id => {
@@ -68,25 +98,16 @@ export default class AppContainer extends React.Component {
     return <Text style={styles.loadingText}>Loading...</Text>;
   };
 
-  renderSearchedList = () => {
+  renderList = ({ isSearched }) => {
     return (
       <View>
         <SearchBar submitSearch={this.getSearchResults} />
+        {this.state.searchFailed && (
+          <Text style={styles.searchBarMessage}>No search results!</Text>
+        )}
         <DealList
           showSingleDeal={this.showSingleDeal}
-          deals={this.state.searchedDeals}
-        />
-      </View>
-    );
-  };
-
-  renderList = () => {
-    return (
-      <View>
-        <SearchBar submitSearch={this.getSearchResults} />
-        <DealList
-          showSingleDeal={this.showSingleDeal}
-          deals={this.state.deals}
+          deals={isSearched ? this.state.searchedDeals : this.state.deals}
         />
       </View>
     );
@@ -103,14 +124,18 @@ export default class AppContainer extends React.Component {
   render() {
     return (
       <View style={styles.appContainer}>
-        <TouchableOpacity onPress={this.toggleBack}>
-          <Text style={styles.header}>Bakesale</Text>
-        </TouchableOpacity>
+        <Animated.View style={{ left: this.titleXPos }}>
+          <TouchableOpacity onPress={this.toggleBack}>
+            <Text style={styles.header}>
+              {this.state.currentDealId ? "Back" : "Bakesale"}
+            </Text>
+          </TouchableOpacity>
+        </Animated.View>
         {!this.state.currentDealId
           ? this.state.deals.length > 0
             ? this.state.searchedDeals.length > 0
-              ? this.renderSearchedList()
-              : this.renderList()
+              ? this.renderList({ isSearched: true })
+              : this.renderList({ isSearched: false })
             : this.renderLoading()
           : this.renderSingleDeal()}
       </View>
@@ -134,5 +159,9 @@ const styles = StyleSheet.create({
   loadingText: {
     alignSelf: "center",
     fontSize: 12
+  },
+  searchBarMessage: {
+    alignSelf: "center",
+    marginVertical: 5
   }
 });
