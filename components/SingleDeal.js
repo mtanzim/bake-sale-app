@@ -48,7 +48,7 @@ export default class SingleDeal extends React.Component {
       <View style={styles.detailContainer}>
         <EachDeal
           fetchDeal={() => console.log("Do nothing")}
-          deal={this.props.initDeal}
+          deal={this.state.deal}
           isDetailed={true}
         />
         {this.state.deal.user && (
