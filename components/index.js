@@ -37,8 +37,8 @@ export default class AppContainer extends React.Component {
         Animated.timing(this.titleXPos, {
           toValue: 0,
           duration: 750,
-          easing: Easing.ease,
-        }).start()
+          easing: Easing.ease
+        }).start();
       }
     });
   };

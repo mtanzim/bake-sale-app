@@ -12,23 +12,56 @@ export default class EachDeal extends React.Component {
       }).isRequired,
       media: PropTypes.arrayOf(PropTypes.string).isRequired
     }).isRequired,
-    fetchDeal: PropTypes.func.isRequired
+    fetchDeal: PropTypes.func.isRequired,
+    isDetailed: PropTypes.bool.isRequired
   };
 
+  state = {
+    curImageIdx: 0
+  };
+
+  toggleImage = () => {
+    this.setState(prevState => {
+      if ( prevState.curImageIdx === this.props.deal.media.length - 1) {
+        return { curImageIdx: 0 };
+      } else {
+        return { curImageIdx: prevState.curImageIdx + 1 };
+      }
+    });
+  };
+
+  renderMultipleImages = () => (
+    <Image
+      style={[styles.dealImage]}
+      source={{ uri: this.props.deal.media[this.state.curImageIdx] }}
+    />
+  );
+
+  renderSingleImage = () => (
+    <Image
+      style={[styles.dealImage]}
+      source={{ uri: this.props.deal.media[0] }}
+    />
+  );
+
   render() {
-    const { deal } = this.props;
+    const { deal, isDetailed } = this.props;
     this.maxTitleLen = 50;
 
     return (
-      <TouchableOpacity
-        style={styles.eachDealContainer}
-        onPress={() => this.props.fetchDeal(deal.key)}
-      >
-        <View>
-          <Image
-            style={[styles.dealImage]}
-            source={{ uri: this.props.deal.media[0] }}
-          />
+      <View style={styles.eachDealContainer}>
+        <TouchableOpacity
+          
+          onPress={() =>
+            !this.props.isDetailed
+              ? this.props.fetchDeal(deal.key)
+              : this.toggleImage()
+          }
+          >
+          {!this.props.isDetailed
+            ? this.renderSingleImage()
+            : this.renderMultipleImages()}
+        </TouchableOpacity>
           <View style={styles.dealTextContainer}>
             <Text style={styles.dealTitle}>
               {deal.title.length < this.maxTitleLen
@@ -43,7 +76,6 @@ export default class EachDeal extends React.Component {
             </View>
           </View>
         </View>
-      </TouchableOpacity>
     );
   }
 }

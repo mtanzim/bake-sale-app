@@ -29,7 +29,7 @@ export default class DealList extends React.Component {
         style={{ marginBottom: 150 }}
         data={this.props.deals}
         renderItem={({ item }) => (
-          <EachDeal fetchDeal={this.fetchSingleDeal} deal={item} />
+          <EachDeal fetchDeal={this.fetchSingleDeal} deal={item} isDetailed={false}/>
         )}
       />
     );

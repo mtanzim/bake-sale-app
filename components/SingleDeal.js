@@ -49,6 +49,7 @@ export default class SingleDeal extends React.Component {
         <EachDeal
           fetchDeal={() => console.log("Do nothing")}
           deal={this.props.initDeal}
+          isDetailed={true}
         />
         {this.state.deal.user && (
           <FlatList

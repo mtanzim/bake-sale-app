@@ -4,7 +4,7 @@
 
 React native application suggested by the following lynda.com [tutorial](https://www.lynda.com/React-Native-tutorials/React-Native-Essential-Training/560343-2.html).
 
-[Expo](https://expo.io/) is being used for development alongside and Android emulator.
+[Expo](https://expo.io/) is being used for development alongside an Android emulator.
 
 ## Lessons Learned
 
@@ -17,4 +17,5 @@ React native application suggested by the following lynda.com [tutorial](https:/
 - [Flexbox in React Native](https://facebook.github.io/react-native/docs/flexbox)
 - Compoments can be remounted by changing the props on the parent (ie: `key`)
 - [Canceling async/fetch commands as component unmounts](https://reactjs.org/blog/2015/12/16/ismounted-antipattern.html)
-    - See example in [SingleDeal.js](./components/SingleDeal.js)
+  - See example in [SingleDeal.js](./components/SingleDeal.js)
+- [**ES6 Class Properties, this, contexts, and context binding with arrow functions**](https://reactkungfu.com/2015/07/why-and-how-to-bind-methods-in-your-react-component-classes/)
