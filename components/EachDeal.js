@@ -17,12 +17,13 @@ export default class EachDeal extends React.Component {
   };
 
   state = {
+    defaultImageIdx: 0,
     curImageIdx: 0
   };
 
   toggleImage = () => {
     this.setState(prevState => {
-      if ( prevState.curImageIdx === this.props.deal.media.length - 1) {
+      if (prevState.curImageIdx === this.props.deal.media.length - 1) {
         return { curImageIdx: 0 };
       } else {
         return { curImageIdx: prevState.curImageIdx + 1 };
@@ -31,17 +32,21 @@ export default class EachDeal extends React.Component {
   };
 
   renderMultipleImages = () => (
-    <Image
-      style={[styles.dealImage]}
-      source={{ uri: this.props.deal.media[this.state.curImageIdx] }}
-    />
+    <TouchableOpacity onPress={() => this.toggleImage()}>
+      <Image
+        style={[styles.dealImage]}
+        source={{ uri: this.props.deal.media[this.state.curImageIdx] }}
+      />
+    </TouchableOpacity>
   );
 
   renderSingleImage = () => (
-    <Image
-      style={[styles.dealImage]}
-      source={{ uri: this.props.deal.media[0] }}
-    />
+    <TouchableOpacity onPress={() => this.props.fetchDeal(this.props.deal.key)}>
+      <Image
+        style={[styles.dealImage]}
+        source={{ uri: this.props.deal.media[this.state.defaultImageIdx] }}
+      />
+    </TouchableOpacity>
   );
 
   render() {
@@ -50,32 +55,23 @@ export default class EachDeal extends React.Component {
 
     return (
       <View style={styles.eachDealContainer}>
-        <TouchableOpacity
-          
-          onPress={() =>
-            !this.props.isDetailed
-              ? this.props.fetchDeal(deal.key)
-              : this.toggleImage()
-          }
-          >
-          {!this.props.isDetailed
-            ? this.renderSingleImage()
-            : this.renderMultipleImages()}
-        </TouchableOpacity>
-          <View style={styles.dealTextContainer}>
-            <Text style={styles.dealTitle}>
-              {deal.title.length < this.maxTitleLen
-                ? deal.title
-                : deal.title.substr(0, this.maxTitleLen) + " ..."}
+        {!this.props.isDetailed
+          ? this.renderSingleImage()
+          : this.renderMultipleImages()}
+        <View style={styles.dealTextContainer}>
+          <Text style={styles.dealTitle}>
+            {deal.title.length < this.maxTitleLen
+              ? deal.title
+              : deal.title.substr(0, this.maxTitleLen) + " ..."}
+          </Text>
+          <View style={styles.dealSubTextContainer}>
+            <Text style={styles.dealCause}>{deal.cause.name}</Text>
+            <Text style={styles.dealPrice}>
+              ${Math.round(deal.price / 100)}
             </Text>
-            <View style={styles.dealSubTextContainer}>
-              <Text style={styles.dealCause}>{deal.cause.name}</Text>
-              <Text style={styles.dealPrice}>
-                ${Math.round(deal.price / 100)}
-              </Text>
-            </View>
           </View>
         </View>
+      </View>
     );
   }
 }
