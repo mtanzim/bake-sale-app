@@ -5,14 +5,17 @@ import {
   View,
   Image,
   TouchableOpacity,
-  PanResponder,
   Animated,
   Dimensions,
-  Easing,
   Button,
   Linking
 } from "react-native";
 import PropTypes from "prop-types";
+
+import {
+  createHorizontalPanResponder,
+  postStateUpdateAnimateSwipe
+} from "./swipeHorizontal";
 
 export default class EachDeal extends React.Component {
   static propTypes = {
@@ -34,71 +37,53 @@ export default class EachDeal extends React.Component {
   };
 
   imageXpos = new Animated.Value(0);
-
-  imagePanResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderMove: (e, gs) => {
-      console.log("Moving", gs.dx);
-      this.imageXpos.setValue(gs.dx)
-    },
-    onPanResponderRelease: (e, gs) => {
-      console.log("Released");
-      this.width = Dimensions.get('window').width;
-      if (Math.abs(gs.dx) > this.width * 0.4) {
-        const dir = Math.sign(gs.dx)
-        // complete swipe left
-        Animated.timing(this.imageXpos, {
-          toValue: dir * this.width,
-          duration: 250,
-          easing: Easing.ease,
-        }).start(()=> {
-          console.log(`Finished switping ${dir > 0 ? 'right' : 'left'}`)
-          this.toggleImage(dir);
-
-        })
-      } else {
-        Animated.spring(this.imageXpos, {
-          toValue: 0,
-          duration: 100,
-          easing: Easing.ease,
-        }).start()
-      }
+  width = Dimensions.get("window").width;
+  imagePanResponder = createHorizontalPanResponder(
+    this.imageXpos,
+    this.width,
+    dir => {
+      console.log(`Finished switping ${dir > 0 ? "right" : "left"}`);
+      this.toggleImage(dir);
     }
-  });
-
+  );
 
   // cycle through the images
-  toggleImage = (dir) => {
-    this.setState(prevState => {
-      if (prevState.curImageIdx === this.props.deal.media.length - 1 && dir > 0) {
-        return { curImageIdx: 0 };
-        // return prevState;
-      } else if (prevState.curImageIdx === 0 && dir < 0) {
-        return {curImageIdx: this.props.deal.media.length - 1};
-        // return prevState;
-      } else {
-        return { curImageIdx: prevState.curImageIdx + (1*dir) };
-      }
-    }, () => {
-      this.imageXpos.setValue(this.width * -1 * dir);
-      console.log(`Current image id is ${this.state.curImageIdx}`)
-      Animated.spring(this.imageXpos, {
-        toValue: 0,
-        duration: 250,
-        easing: Easing.ease,
-      }).start()
-    });
+  toggleImage = dir => {
+    this.setState(
+      prevState => {
+        if (
+          prevState.curImageIdx === this.props.deal.media.length - 1 &&
+          dir > 0
+        ) {
+          return { curImageIdx: 0 };
+          // return prevState;
+        } else if (prevState.curImageIdx === 0 && dir < 0) {
+          return { curImageIdx: this.props.deal.media.length - 1 };
+          // return prevState;
+        } else {
+          return { curImageIdx: prevState.curImageIdx + 1 * dir };
+        }
+      },
+      () =>
+        postStateUpdateAnimateSwipe(
+          dir,
+          this.imageXpos,
+          this.width,
+          `Current image index: ${this.state.curImageIdx}`
+        )
+    );
   };
 
   handleBuy = () => {
-    Linking.openURL(this.props.deal.url)
-      .catch(err => console.error('An error occurred', err));
-  }
+    Linking.openURL(this.props.deal.url).catch(err =>
+      console.error("An error occurred", err)
+    );
+  };
 
   renderMultipleImages = () => (
     <Animated.Image
       {...this.imagePanResponder.panHandlers}
-      style={[styles.dealImage, {left:this.imageXpos} ]}
+      style={[styles.dealImage, { left: this.imageXpos }]}
       source={{ uri: this.props.deal.media[this.state.curImageIdx] }}
     />
   );
@@ -129,8 +114,13 @@ export default class EachDeal extends React.Component {
           </Text>
           <View style={styles.dealSubTextContainer}>
             <Text style={styles.dealCause}>{deal.cause.name}</Text>
-            {this.props.deal.url && (<Button onPress={this.handleBuy} title={'$ '+Math.round(deal.price / 100).toString()} style={styles.dealPrice}>
-            </Button>)}
+            {this.props.deal.url && (
+              <Button
+                onPress={this.handleBuy}
+                title={"$ " + Math.round(deal.price / 100).toString()}
+                style={styles.dealPrice}
+              />
+            )}
           </View>
         </View>
       </View>

@@ -13,15 +13,34 @@ import DealList from "./DealList";
 import SingleDeal from "./SingleDeal";
 import SearchBar from "./SearchBar";
 
+import {
+  createHorizontalPanResponder,
+  postStateUpdateAnimateSwipe
+} from "./swipeHorizontal";
+
 export default class AppContainer extends React.Component {
   titleXPos = new Animated.Value(0);
 
   state = {
     deals: [],
+    curDealIndex: -1,
+    curDealDetail: null,
     searchedDeals: [],
     searchFailed: false,
     currentDealId: null
   };
+
+  pageXpos = new Animated.Value(0);
+  width = Dimensions.get("window").width;
+  pagePanResponder = createHorizontalPanResponder(
+    this.pageXpos,
+    this.width,
+    // callback on successful release
+    dir => {
+      console.log(`Finished page swiping ${dir > 0 ? "right" : "left"}`);
+      this.togglePages(dir);
+    }
+  );
 
   animateHeader = (dir = 1) => {
     const width = Dimensions.get("window").width - 250;
@@ -70,13 +89,44 @@ export default class AppContainer extends React.Component {
     });
   };
 
-  showSingleDeal = id => {
+  // cycle through the images
+  togglePages = dir => {
+    dir = -1 * dir;
+
     this.setState(
-      {
-        currentDealId: id
+      prevState => {
+        if (prevState.curDealIndex === prevState.deals.length - 1 && dir > 0) {
+          let curIdx = 0;
+          return {
+            curDealIndex: curIdx,
+            currentDealId: prevState.deals[curIdx].key
+          };
+          // return prevState;
+        } else if (prevState.curDealIndex === 0 && dir < 0) {
+          let curIdx = prevState.deals.length - 1;
+
+          return {
+            curDealIndex: curIdx,
+            currentDealId: prevState.deals[curIdx].key
+          };
+          // return prevState;
+        } else {
+          let curIdx = prevState.curDealIndex + 1 * dir;
+          return {
+            curDealIndex: curIdx,
+            currentDealId: prevState.deals[curIdx].key
+          };
+        }
       },
       () => {
-        console.log(this.state.currentDealId);
+        postStateUpdateAnimateSwipe(
+          -1 * dir,
+          this.pageXpos,
+          this.width,
+          `Current page index: ${this.state.curDealIndex}\nCurrent page key: ${
+            this.state.currentDealId
+          }`
+        );
       }
     );
   };
@@ -98,6 +148,18 @@ export default class AppContainer extends React.Component {
     return <Text style={styles.loadingText}>Loading...</Text>;
   };
 
+  showSingleDeal = id => {
+    this.setState(
+      {
+        currentDealId: id,
+        curDealIndex: this.state.deals.findIndex(deal => deal.key === id)
+      },
+      () => {
+        console.log(this.state.currentDealId);
+        console.log(`switched to deal index: ${this.state.curDealIndex}`);
+      }
+    );
+  };
   renderList = ({ isSearched }) => {
     return (
       <View>
@@ -118,7 +180,13 @@ export default class AppContainer extends React.Component {
   };
 
   renderSingleDeal = () => {
-    return <SingleDeal initDeal={this.findCurrentDeal()} />;
+    return (
+      <SingleDeal
+        panFunc={this.pagePanResponder}
+        animX={this.pageXpos}
+        initDeal={this.findCurrentDeal()}
+      />
+    );
   };
 
   render() {

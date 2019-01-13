@@ -6,7 +6,8 @@ import {
   View,
   Image,
   TouchableOpacity,
-  Button
+  Button,
+  Animated
 } from "react-native";
 import PropTypes from "prop-types";
 
@@ -22,21 +23,36 @@ export default class SingleDeal extends React.Component {
         name: PropTypes.string.isRequired
       }).isRequired,
       media: PropTypes.arrayOf(PropTypes.string).isRequired
-    }).isRequired
+    }).isRequired,
+    panFunc: PropTypes.any.isRequired,
+    animX: PropTypes.any.isRequired
   };
 
   state = {
     deal: this.props.initDeal
   };
 
-  cancelableFetch = makeCancelable(fetchOneDeal(this.state.deal.key));
+  cancelableFetch = null;
 
-  componentDidMount() {
+  executeFetch = () => {
+    this.cancelableFetch = makeCancelable(
+      fetchOneDeal(this.props.initDeal.key)
+    );
     this.cancelableFetch.promise
       .then(res => {
         this.setState({ deal: res });
       })
       .catch(err => console.log(err));
+  };
+
+  componentDidMount() {
+    this.executeFetch();
+  }
+
+  componentWillReceiveProps() {
+    console.log("Page swipe recognized in Single Deal?");
+    console.log(`Single page key is ${this.state.deal.key}`);
+    this.setState({ deal: this.props.initDeal }, this.executeFetch);
   }
 
   componentWillUnmount() {
@@ -45,7 +61,10 @@ export default class SingleDeal extends React.Component {
 
   render() {
     return (
-      <View style={styles.detailContainer}>
+      <Animated.View
+        {...this.props.panFunc.panHandlers}
+        style={[{ left: this.props.animX }, styles.detailContainer]}
+      >
         <EachDeal
           fetchDeal={() => console.log("Do nothing")}
           deal={this.state.deal}
@@ -66,7 +85,7 @@ export default class SingleDeal extends React.Component {
             keyExtractor={(item, index) => index.toString()}
           />
         )}
-      </View>
+      </Animated.View>
     );
   }
 }
