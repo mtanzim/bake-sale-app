@@ -19,3 +19,5 @@ React native application suggested by the following lynda.com [tutorial](https:/
 - [Canceling async/fetch commands as component unmounts](https://reactjs.org/blog/2015/12/16/ismounted-antipattern.html)
   - See example in [SingleDeal.js](./components/SingleDeal.js)
 - [**ES6 Class Properties, this, contexts, and context binding with arrow functions**](https://reactkungfu.com/2015/07/why-and-how-to-bind-methods-in-your-react-component-classes/)
+- Examples of `componentWillReceiveProps()`
+  - [components/EachDeal.js](components/EachDeal.js)
