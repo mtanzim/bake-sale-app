@@ -18,6 +18,8 @@ import {
   postStateUpdateAnimateSwipe
 } from "./swipeHorizontal";
 
+import { fetchOneDeal, makeCancelable } from "./fetch";
+
 export default class AppContainer extends React.Component {
   titleXPos = new Animated.Value(0);
 
@@ -42,6 +44,17 @@ export default class AppContainer extends React.Component {
     }
   );
 
+  cancelableFetch = null;
+
+  executeFetch = (key, cb) => {
+    this.cancelableFetch = makeCancelable(fetchOneDeal(key));
+    this.cancelableFetch.promise
+      .then(res => {
+        cb(res);
+      })
+      .catch(err => console.log(err));
+  };
+
   animateHeader = (dir = 1) => {
     const width = Dimensions.get("window").width - 250;
 
@@ -65,9 +78,7 @@ export default class AppContainer extends React.Component {
   async componentDidMount() {
     if (this.state.deals.length === 0) this.animateHeader();
     let deals = await fetchInitialDeals();
-    setTimeout(async () => {
-      this.setState({ deals });
-    }, 1250);
+    this.setState({ deals });
   }
 
   getSearchResults = async text => {
@@ -148,11 +159,11 @@ export default class AppContainer extends React.Component {
     return <Text style={styles.loadingText}>Loading...</Text>;
   };
 
-  showSingleDeal = id => {
+  showSingleDeal = (id) => {
     this.setState(
       {
         currentDealId: id,
-        curDealIndex: this.state.deals.findIndex(deal => deal.key === id)
+        curDealIndex: this.state.deals.findIndex(deal => deal.key === id),
       },
       () => {
         console.log(this.state.currentDealId);
@@ -160,6 +171,7 @@ export default class AppContainer extends React.Component {
       }
     );
   };
+
   renderList = ({ isSearched }) => {
     return (
       <View>

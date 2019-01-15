@@ -36,8 +36,16 @@ export default class EachDeal extends React.Component {
     curImageIdx: 0
   };
 
+  componentWillReceiveProps() {
+    console.log('Each Deal will receive props. Resetting image index to 0');
+    this.setState({
+      curImageIdx: 0
+    })
+  }
+
   imageXpos = new Animated.Value(0);
   width = Dimensions.get("window").width;
+
   imagePanResponder = createHorizontalPanResponder(
     this.imageXpos,
     this.width,
@@ -56,10 +64,8 @@ export default class EachDeal extends React.Component {
           dir > 0
         ) {
           return { curImageIdx: 0 };
-          // return prevState;
         } else if (prevState.curImageIdx === 0 && dir < 0) {
           return { curImageIdx: this.props.deal.media.length - 1 };
-          // return prevState;
         } else {
           return { curImageIdx: prevState.curImageIdx + 1 * dir };
         }
