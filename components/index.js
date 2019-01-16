@@ -176,13 +176,13 @@ export default class AppContainer extends React.Component {
     return (
       <View>
         <SearchBar submitSearch={this.getSearchResults} />
-        {this.state.searchFailed && (
+        {this.state.searchFailed ? (
           <Text style={styles.searchBarMessage}>No search results!</Text>
-        )}
+        ): (
         <DealList
           showSingleDeal={this.showSingleDeal}
           deals={isSearched ? this.state.searchedDeals : this.state.deals}
-        />
+        />)}
       </View>
     );
   };
@@ -206,7 +206,7 @@ export default class AppContainer extends React.Component {
       <View style={styles.appContainer}>
         <Animated.View style={{ left: this.titleXPos }}>
           <TouchableOpacity onPress={this.toggleBack}>
-            <Text style={styles.header}>
+            <Text style={this.state.currentDealId ? styles.back : styles.header}>
               {this.state.currentDealId ? "Back" : "Bakesale"}
             </Text>
           </TouchableOpacity>
@@ -235,6 +235,14 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontSize: 40,
     marginBottom: 20
+  },
+  back: {
+    alignSelf: "flex-start",
+    marginHorizontal: 15,
+    padding: 5,
+    fontSize: 25,
+    marginBottom: 15,
+    // backgroundColor: 'cyan'
   },
   loadingText: {
     alignSelf: "center",

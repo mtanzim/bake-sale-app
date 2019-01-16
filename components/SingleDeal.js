@@ -4,6 +4,7 @@ import {
   FlatList,
   Text,
   View,
+  ScrollView,
   Image,
   TouchableOpacity,
   Button,
@@ -59,33 +60,56 @@ export default class SingleDeal extends React.Component {
     this.cancelableFetch.cancel();
   }
 
+  renderAnimatedView = () => (
+    <Animated.View
+      {...this.props.panFunc.panHandlers}
+      style={[{ left: this.props.animX }, styles.detailContainer]}
+    >
+      <EachDeal
+        fetchDeal={() => console.log("Do nothing")}
+        deal={this.state.deal}
+        isDetailed={true}
+      />
+      {this.state.deal.user && this.renderFlatList()}
+    </Animated.View>
+  );
+
+  renderFlatList = () => (
+    <FlatList
+      style={styles.singleDealDetail}
+      data={[
+        { content: this.state.deal.user.name, styleClass: styles.title },
+        { content: this.state.deal.description, styleClass: styles.desc }
+      ]}
+      renderItem={({ item }) => (
+        <Text style={item.styleClass} id={item.id}>
+          {item.content}
+        </Text>
+      )}
+      keyExtractor={(item, index) => index.toString()}
+    />
+  );
+
   render() {
-    return (
-      <Animated.View
-        {...this.props.panFunc.panHandlers}
-        style={[{ left: this.props.animX }, styles.detailContainer]}
-      >
+    // return this.renderAnimatedView();
+    return (  
+      <View style={[styles.detailContainer]}>
         <EachDeal
           fetchDeal={() => console.log("Do nothing")}
           deal={this.state.deal}
           isDetailed={true}
         />
         {this.state.deal.user && (
-          <FlatList
-            style={styles.singleDealDetail}
-            data={[
-              { content: this.state.deal.user.name, styleClass: styles.title },
-              { content: this.state.deal.description, styleClass: styles.desc }
-            ]}
-            renderItem={({ item }) => (
-              <Text style={item.styleClass} id={item.id}>
-                {item.content}
-              </Text>
-            )}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        )}
-      </Animated.View>
+        <ScrollView style={styles.singleDealDetail} >
+          <Text style={styles.title}>
+            {this.state.deal.user.name}
+          </Text>
+          <Text style={styles.desc}>
+            {this.state.deal.description}
+          </Text>
+
+        </ScrollView>)}
+      </View>
     );
   }
 }
