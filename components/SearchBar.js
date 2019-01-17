@@ -13,7 +13,7 @@ export default class SearchBar extends React.Component {
 
   changeSearchText = text => {
     this.setState({ text }, () => {
-      // console.log(this.state.text);
+      // // console.logthis.state.text);
       this.props.submitSearch(this.state.text);
     });
   };

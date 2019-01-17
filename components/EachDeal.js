@@ -37,7 +37,7 @@ export default class EachDeal extends React.Component {
   };
 
   componentWillReceiveProps() {
-    console.log('Each Deal will receive props. Resetting image index to 0');
+    // // console.log'Each Deal will receive props. Resetting image index to 0');
     this.setState({
       curImageIdx: 0
     })
@@ -50,7 +50,7 @@ export default class EachDeal extends React.Component {
     this.imageXpos,
     this.width,
     dir => {
-      console.log(`Finished switping ${dir > 0 ? "right" : "left"}`);
+      // console.log`Finished switping ${dir > 0 ? "right" : "left"}`);
       this.toggleImage(dir);
     }
   );
@@ -166,7 +166,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 8,
     borderRadius: 6,
-    backgroundColor: "orange"
   },
   dealCause: {
     alignSelf: "flex-end",

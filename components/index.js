@@ -39,7 +39,7 @@ export default class AppContainer extends React.Component {
     this.width,
     // callback on successful release
     dir => {
-      console.log(`Finished page swiping ${dir > 0 ? "right" : "left"}`);
+      // console.log`Finished page swiping ${dir > 0 ? "right" : "left"}`);
       this.togglePages(dir);
     }
   );
@@ -52,7 +52,7 @@ export default class AppContainer extends React.Component {
       .then(res => {
         cb(res);
       })
-      .catch(err => console.log(err));
+      // .catch(err => // console.logerr));
   };
 
   animateHeader = (dir = 1) => {
@@ -166,8 +166,8 @@ export default class AppContainer extends React.Component {
         curDealIndex: this.state.deals.findIndex(deal => deal.key === id),
       },
       () => {
-        console.log(this.state.currentDealId);
-        console.log(`switched to deal index: ${this.state.curDealIndex}`);
+        // console.logthis.state.currentDealId);
+        // console.log`switched to deal index: ${this.state.curDealIndex}`);
       }
     );
   };

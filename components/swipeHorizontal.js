@@ -7,7 +7,7 @@ export const postStateUpdateAnimateSwipe = (
   msg = ''
 ) => {
   animXPos.setValue(screenWidth * -1 * dir);
-  console.log(msg);
+  // console.logmsg);
   Animated.spring(animXPos, {
     toValue: 0,
     duration: 250,
@@ -23,11 +23,11 @@ export const createHorizontalPanResponder = (
   PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderMove: (e, gs) => {
-      console.log("Moving", gs.dx);
+      // console.log"Moving", gs.dx);
       animXPos.setValue(gs.dx);
     },
     onPanResponderRelease: (e, gs) => {
-      console.log("Released");
+      // console.log"Released");
       // successful swipe
       if (Math.abs(gs.dx) > screenWidth * 0.4) {
         const dir = Math.sign(gs.dx);
