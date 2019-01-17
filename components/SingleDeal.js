@@ -105,8 +105,8 @@ export default class SingleDeal extends React.Component {
           style={[{ left: this.props.animX }, styles.swipe]}
         >
           <View style={styles.swipeTextContainer}>
-            <Text>{"<<"}</Text>
-            <Text>{">>"}</Text>
+            <Text></Text>
+            <Text></Text>
           </View>
         </Animated.View>
         {!this.state.loading && (
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   swipe: {
     marginBottom: 20,
     marginHorizontal: 85,
-    height: 10,
+    height: 20,
     alignSelf: "stretch",
     // borderColor: "red",
     backgroundColor: "orange",
